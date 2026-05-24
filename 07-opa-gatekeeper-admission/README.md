@@ -1,6 +1,6 @@
 # 07. OPA Gatekeeper: policy at admission
 
-> 🇯🇵 [日本語](./README.ja.md) ・ 🇺🇸 English
+**English** | [日本語](README.ja.md)
 
 The previous labs all enforce at the dataplane: packets arrive, something decides. This one moves the decision **before** the workload exists, into the API server's admission chain. Misconfigured manifests never get past `kubectl apply`.
 

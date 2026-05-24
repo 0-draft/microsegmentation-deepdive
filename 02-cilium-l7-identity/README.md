@@ -1,6 +1,6 @@
 # 02. Cilium L7 + Identity (with Hubble)
 
-> 🇯🇵 [日本語](./README.ja.md) ・ 🇺🇸 English
+**English** | [日本語](README.ja.md)
 
 This is the lab that shows what Pattern 01 can't do. Same workloads, but the policy now reads "from `web` to `cart`, only `GET` and `POST` are allowed", and the eBPF dataplane redirects matching connections through Envoy to enforce it.
 

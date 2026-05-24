@@ -1,6 +1,6 @@
 # 01. K8s NetworkPolicy + Calico
 
-> 🇯🇵 日本語 ・ 🇺🇸 [English](./README.md)
+[English](README.md) | **日本語**
 
 マイクロセグメンテーション入門編。素の `networking.k8s.io/v1` NetworkPolicy を Calico CNI で L3/L4 enforcement する。同じ YAML は NetworkPolicy を実装している任意の CNI で動く (kindnet は実装してないので Calico を入れる)。
 

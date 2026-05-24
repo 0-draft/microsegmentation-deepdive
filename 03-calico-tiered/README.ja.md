@@ -1,6 +1,6 @@
 # 03. Calico Global / Ordered Policy
 
-> 🇯🇵 日本語 ・ 🇺🇸 [English](./README.md)
+[English](README.md) | **日本語**
 
 Calico の `GlobalNetworkPolicy` は、アップストリームの `NetworkPolicy` ではカバーできない領域を担う。クラスタ横断ルール、明示的な `order` フィールド、リッチなセレクタ、`Allow` と混在できる `Deny` アクション。このラボはバニラ NetworkPolicy で書けない 2 つを動かす。
 

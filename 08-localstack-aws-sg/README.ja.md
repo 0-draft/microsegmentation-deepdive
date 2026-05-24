@@ -1,6 +1,6 @@
 # 08. AWS Security Group as code (LocalStack + OpenTofu)
 
-> 🇯🇵 日本語 ・ 🇺🇸 [English](./README.md)
+[English](README.md) | **日本語**
 
 マイクロセグメンテーションのクラウドネイティブ版。VPC・subnet・SG を IaC で宣言して、クラウドプラットフォーム側に enforcement させる。このラボはその AWS API 表面を LocalStack で完全オフラインに動かすので、Terraform モデルを AWS の請求書なしで回せる。
 

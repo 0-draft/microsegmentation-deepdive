@@ -1,6 +1,6 @@
 # 05. SPIFFE / SPIRE: ワークロード ID 配布をゼロから
 
-> 🇯🇵 日本語 ・ 🇺🇸 [English](./README.md)
+[English](README.md) | **日本語**
 
 Pattern 04 は Istio の内蔵 CA を使ったが、便利な反面メカニズムが隠れる。このラボは SPIRE を素で動かす。server、agent、ワークロード認証 (attestation)、X.509-SVID 発行。SPIFFE ID が発行されて Pod に渡るのを目で見るためのラボ。
 

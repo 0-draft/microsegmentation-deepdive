@@ -1,6 +1,6 @@
 # microsegmentation-deepdive
 
-> 🇯🇵 日本語 ・ 🇺🇸 [English](./README.md)
+[English](README.md) | **日本語**
 
 マイクロセグメンテーションは語られまくっているが、end-to-end で動かす場が少ない。このリポは 8 種類の実装をラップトップ 1 台で実際に走らせて、パケットに何が起きるかを目で見て確認するためのもの。
 

@@ -1,6 +1,6 @@
 # 04. Istio mTLS + AuthorizationPolicy
 
-> 🇯🇵 [日本語](./README.ja.md) ・ 🇺🇸 English
+**English** | [日本語](README.ja.md)
 
 This is where the source of trust shifts. Patterns 01–03 still authenticate "by pod label", which the kubelet writes. Once Istio is in the picture, every service has its own X.509 cert (a SPIFFE ID minted by Istiod), and policy is written against `principals` rather than label selectors.
 

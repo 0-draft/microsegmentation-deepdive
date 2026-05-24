@@ -1,6 +1,6 @@
 # microsegmentation-deepdive
 
-> 🇯🇵 [日本語](./README.ja.md) ・ 🇺🇸 English
+**English** | [日本語](README.ja.md)
 
 Microsegmentation talked about everywhere, almost never shown end-to-end. This repo runs eight different implementations on a laptop, so you can see what each pattern actually does to packets.
 

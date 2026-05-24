@@ -1,6 +1,6 @@
 # 03. Calico Global / Ordered Policy
 
-> 🇯🇵 [日本語](./README.ja.md) ・ 🇺🇸 English
+**English** | [日本語](README.ja.md)
 
 Calico's `GlobalNetworkPolicy` is the part the upstream `NetworkPolicy` doesn't cover: cluster-wide rules with explicit `order`, rich selectors, and a `Deny` action you can mix with `Allow`. This lab shows two things you can't express with vanilla NetworkPolicy alone.
 

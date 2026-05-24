@@ -1,6 +1,6 @@
 # 01. K8s NetworkPolicy with Calico
 
-> 🇯🇵 [日本語](./README.ja.md) ・ 🇺🇸 English
+**English** | [日本語](README.ja.md)
 
 The starter-pack version of microsegmentation. Plain `networking.k8s.io/v1` NetworkPolicy, enforced by Calico CNI at L3/L4. Same YAML works on any CNI that implements NetworkPolicy (kindnet doesn't, which is why we install Calico).
 

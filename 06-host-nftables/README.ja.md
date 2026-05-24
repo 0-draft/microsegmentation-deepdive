@@ -1,6 +1,6 @@
 # 06. ホストファイアウォール (nftables in Docker)
 
-> 🇯🇵 日本語 ・ 🇺🇸 [English](./README.md)
+[English](README.md) | **日本語**
 
 Illumio や Akamai Guardicore、Cisco Secure Workload のエージェントが最終的にやっているのは、ホストの packet filter にポリシーを展開すること。それを見るのに製品は要らない。Linux コンテナと `nftables` と `CAP_NET_ADMIN` があればいい。
 

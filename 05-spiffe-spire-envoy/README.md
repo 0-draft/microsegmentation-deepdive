@@ -1,6 +1,6 @@
 # 05. SPIFFE / SPIRE: workload identity from scratch
 
-> 🇯🇵 [日本語](./README.ja.md) ・ 🇺🇸 English
+**English** | [日本語](README.ja.md)
 
 Pattern 04 used Istio's built-in CA, which is fine but hides the mechanics. This one runs SPIRE directly: server, agent, workload attestation, X.509-SVID issuance. The point is to see the SPIFFE ID being minted and handed to a pod.
 

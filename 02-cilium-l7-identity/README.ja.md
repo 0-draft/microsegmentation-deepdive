@@ -1,6 +1,6 @@
 # 02. Cilium L7 + Identity (Hubble 付き)
 
-> 🇯🇵 日本語 ・ 🇺🇸 [English](./README.md)
+[English](README.md) | **日本語**
 
 Pattern 01 でできないことを見るためのラボ。ワークロードは同じだが、ポリシーが「`web` から `cart` への通信は `GET` と `POST` のみ許可」になっていて、eBPF データプレーンがマッチした接続を Envoy にリダイレクトして enforcement する。
 

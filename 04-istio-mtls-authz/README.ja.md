@@ -1,6 +1,6 @@
 # 04. Istio mTLS + AuthorizationPolicy
 
-> 🇯🇵 日本語 ・ 🇺🇸 [English](./README.md)
+[English](README.md) | **日本語**
 
 ここで「信頼の根拠」が切り替わる。Pattern 01–03 はあくまで「Pod のラベル」で認証していて、ラベルは kubelet が書く。Istio が入ると、各サービスが自分の X.509 証明書 (Istiod が発行する SPIFFE ID) を持ち、ポリシーは label セレクタではなく `principals` で書かれる。
 

@@ -1,6 +1,6 @@
 # 07. OPA Gatekeeper: admission 時のポリシー
 
-> 🇯🇵 日本語 ・ 🇺🇸 [English](./README.md)
+[English](README.md) | **日本語**
 
 これまでのラボは全部 dataplane で enforcement していた (パケットが届いてから判定)。このラボは判定をワークロードが存在する **前**、API server の admission チェインに移す。設定ミス manifest は `kubectl apply` を超えられない。
 

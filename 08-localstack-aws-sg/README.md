@@ -1,6 +1,6 @@
 # 08. AWS Security Group as code (LocalStack + OpenTofu)
 
-> 🇯🇵 [日本語](./README.ja.md) ・ 🇺🇸 English
+**English** | [日本語](README.ja.md)
 
 The cloud-native take on microsegmentation: declare VPC, subnets, security groups in IaC and let the cloud platform enforce them. This lab runs the AWS API surface entirely offline via LocalStack, so you can iterate the Terraform model without an AWS bill.
 
