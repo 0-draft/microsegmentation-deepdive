@@ -2,7 +2,7 @@
 
 **English** | [日本語](README.ja.md)
 
-This is what an Illumio / Akamai Guardicore / Cisco Secure Workload agent ultimately does: render policies into the host's own packet filter. We don't need a fancy product to see the mechanic, just a Linux container with `nftables` and `CAP_NET_ADMIN`.
+Host-firewall agents from Illumio, Akamai Guardicore and Cisco Secure Workload all funnel into the same final step: render policy as the host's own packet filter rules (Windows Filtering Platform on Windows; `iptables` / `nftables` on Linux). This lab reproduces just that last step using a Linux container with `nftables` and `CAP_NET_ADMIN`.
 
 ## What gets verified
 

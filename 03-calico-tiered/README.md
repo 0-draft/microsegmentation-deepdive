@@ -28,8 +28,6 @@ Vanilla `NetworkPolicy` is additive-allow and namespace-scoped. There's no `Deny
 ./run.sh
 ```
 
-About 2 minutes. Expected output: [`expected/output.txt`](./expected/output.txt).
-
 ## Cleanup
 
 ```bash

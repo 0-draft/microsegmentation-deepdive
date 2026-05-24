@@ -32,8 +32,6 @@ Pattern 01 stops lateral movement once a workload exists. But if developers can 
 ./run.sh
 ```
 
-About 2 minutes. Expected output: [`expected/output.txt`](./expected/output.txt).
-
 ## Cleanup
 
 ```bash

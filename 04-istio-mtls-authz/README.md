@@ -26,8 +26,6 @@ NetworkPolicy trusts the network. If a malicious pod takes the same label, it ge
 ./run.sh
 ```
 
-About 4 minutes (Istio install dominates). Expected output: [`expected/output.txt`](./expected/output.txt).
-
 ## Cleanup
 
 ```bash

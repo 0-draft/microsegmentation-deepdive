@@ -6,7 +6,7 @@ The cloud-native take on microsegmentation: declare VPC, subnets, security group
 
 ## What this lab is, and isn't
 
-LocalStack emulates the **AWS API** for EC2/VPC/SG. It returns sensible responses, lets you query SG memberships, and applies SG rules to its mock EC2 instances (which are themselves Docker containers under the hood). What it does **not** do is enforce SGs the same way real AWS does at the hypervisor level. Read it as "the IaC + API exercise", not "packet-level proof".
+LocalStack emulates the **AWS API** for EC2/VPC/SG. You can `terraform apply` real-looking resources, query SG memberships, and see rule wiring. According to LocalStack's docs, SG ingress rules are applied to its dockerised mock EC2 instances **at creation time only** (subsequent SG rule changes don't reach the running container). So treat this lab as "IaC + API exercise", not as packet-level enforcement proof.
 
 For the actual packet-level verification of the same pattern, run Pattern 01 (K8s NetworkPolicy) and re-read the SG rules as the cluster equivalent.
 
@@ -30,8 +30,6 @@ This is what an enterprise platform team would version-control. SG-as-code is wh
 ```bash
 ./run.sh
 ```
-
-About 1 minute (LocalStack pull is the heavy bit). Expected output: [`expected/output.txt`](./expected/output.txt).
 
 ## Cleanup
 

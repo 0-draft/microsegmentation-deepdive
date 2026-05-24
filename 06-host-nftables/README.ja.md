@@ -2,7 +2,7 @@
 
 [English](README.md) | **日本語**
 
-Illumio や Akamai Guardicore、Cisco Secure Workload のエージェントが最終的にやっているのは、ホストの packet filter にポリシーを展開すること。それを見るのに製品は要らない。Linux コンテナと `nftables` と `CAP_NET_ADMIN` があればいい。
+Illumio、Akamai Guardicore、Cisco Secure Workload のホスト型エージェントは、最終的にどれもホストの packet filter にポリシーを書き出すところに収束する (Windows なら Windows Filtering Platform、Linux なら `iptables` / `nftables`)。このラボはその最後のステップだけを Linux コンテナと `nftables` + `CAP_NET_ADMIN` で再現する。
 
 ## 何を検証するか
 

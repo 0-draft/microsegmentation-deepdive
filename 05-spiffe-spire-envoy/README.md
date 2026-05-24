@@ -41,8 +41,6 @@ Pod                spire-agent (DS)         spire-server
 ./run.sh
 ```
 
-About 3 minutes. Expected output: [`expected/output.txt`](./expected/output.txt).
-
 ## Cleanup
 
 ```bash

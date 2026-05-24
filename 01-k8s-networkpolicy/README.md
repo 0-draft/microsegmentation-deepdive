@@ -24,8 +24,6 @@ NetworkPolicy is **additive allow-list**: once any rule selects a pod for `Ingre
 ./run.sh
 ```
 
-About 2 minutes the first time (image pulls). The script reuses an existing cluster if you've run it before.
-
 Expected output: [`expected/output.txt`](./expected/output.txt).
 
 ## Cleanup

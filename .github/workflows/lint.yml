@@ -1,0 +1,73 @@
+name: lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: ShellCheck all run.sh / cleanup.sh
+        run: |
+          set -e
+          # SC2015: `[ cond ] && ok ... || ng ...` is intentional in assert lines
+          # because both helpers are simple printf wrappers and ng exits anyway.
+          fail=0
+          while IFS= read -r f; do
+            echo "::group::shellcheck $f"
+            if ! shellcheck --exclude=SC2015 "$f"; then fail=1; fi
+            echo "::endgroup::"
+          done < <(find . -type f \( -name 'run.sh' -o -name 'cleanup.sh' -o -path './lib/*.sh' \))
+          exit "$fail"
+
+  yamllint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          config_file: .yamllint.yml
+
+  markdownlint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: DavidAnson/markdownlint-cli2-action@v20
+        with:
+          globs: |
+            **/*.md
+          config: .markdownlint.jsonc
+
+  kubectl-dry-run:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+      - name: kubectl --dry-run=client on every manifest
+        run: |
+          set -e
+          fail=0
+          # Skip CRDs that the client doesn't know about (Calico/Cilium/Istio/SPIRE/Gatekeeper).
+          # We validate plain k8s manifests only.
+          while IFS= read -r f; do
+            case "$f" in
+              */policy-db-l4.yaml|*/policy-cart-l7.yaml|*/policy-deny-staging-to-prod.yaml|\
+              */policy-allow-audit-exception.yaml|*/peer-auth-strict.yaml|\
+              */authz-httpbin-cart-only.yaml|*/template-required-labels.yaml|\
+              */constraint-required-labels.yaml|*/template-no-pod-without-netpol.yaml|\
+              */constraint-no-pod-without-netpol.yaml|*/sync-config.yaml)
+                echo "skip CRD-bound: $f"; continue;;
+            esac
+            echo "::group::kubectl dry-run $f"
+            if ! kubectl apply --dry-run=client -f "$f"; then fail=1; fi
+            echo "::endgroup::"
+          done < <(find . -type f -path '*/manifests/*.yaml')
+          exit "$fail"

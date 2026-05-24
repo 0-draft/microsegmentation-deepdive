@@ -19,6 +19,8 @@ Microsegmentation talked about everywhere, almost never shown end-to-end. This r
 
 Each directory has its own README, `run.sh`, `cleanup.sh`, and manifests. The scripts are idempotent and clean up after themselves.
 
+If you're starting from zero, the labs build on each other in numbered order: 01 establishes the L3/L4 baseline, 02 introduces L7 and identity, 04/05 swap label-trust for cert-trust, 06 covers the host-firewall view, 07 the admission-time guardrail, 08 the cloud API surface.
+
 ## What you need
 
 Docker (any of Docker Desktop / Rancher Desktop / OrbStack), plus `kind`, `kubectl`, `helm`. For specific patterns also `cilium`, `istioctl`, `tofu`, `jq`.

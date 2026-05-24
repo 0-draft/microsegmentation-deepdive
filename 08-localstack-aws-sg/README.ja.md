@@ -6,7 +6,7 @@
 
 ## このラボは何で、何ではないか
 
-LocalStack は EC2/VPC/SG の **AWS API** をエミュレートする。それっぽいレスポンスを返し、SG メンバーシップをクエリでき、モック EC2 インスタンス (実体は Docker コンテナ) に SG ルールを当てる。やっていない部分: 本物の AWS が hypervisor レベルでやっているのと同じ packet 強制までは再現しない。「IaC と API の練習」として読んでほしい。「パケットレベルの証明」は Pattern 01 (K8s NetworkPolicy) の方を見て、SG ルールをクラスタ版として読み替える。
+LocalStack は EC2/VPC/SG の **AWS API** をエミュレートする。`terraform apply` で本物っぽいリソースが作れて、SG メンバーシップもクエリできる。公式ドキュメントによると、SG の ingress ルールは dockerised モック EC2 インスタンスに **作成時にのみ** 適用される (作成後の SG ルール変更は走ってるコンテナまで届かない)。なのでこのラボは「IaC と API の練習」として読んでほしい。パケットレベルの強制プルーフが欲しければ Pattern 01 (K8s NetworkPolicy) を回して、SG ルールをクラスタ版として読み替える。
 
 ## 何を検証するか
 

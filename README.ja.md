@@ -19,6 +19,8 @@
 
 各ディレクトリに固有の README、`run.sh`、`cleanup.sh`、manifests が入っている。スクリプトは idempotent で、自分で後片付けもする。
 
+ゼロから入る場合は番号順に積み上がる構成: 01 で L3/L4 のベースラインを作り、02 で L7 と identity を導入、04/05 でラベル信頼から証明書信頼へ、06 でホスト側の視点、07 で admission 時のガードレール、08 でクラウド API 表面、という流れ。
+
 ## 必要なもの
 
 Docker (Docker Desktop / Rancher Desktop / OrbStack のいずれか) と `kind` `kubectl` `helm`。パターンごとに追加で `cilium` `istioctl` `tofu` `jq` が要る場合がある。

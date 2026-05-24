@@ -20,8 +20,6 @@ Cilium does not write IP addresses into iptables. It assigns a stable numeric **
 ./run.sh
 ```
 
-About 3 minutes the first time. The script enables Hubble UI but does not pop the browser; if you want to look, run `cilium hubble ui` afterwards.
-
 Expected output: [`expected/output.txt`](./expected/output.txt).
 
 ## Cleanup

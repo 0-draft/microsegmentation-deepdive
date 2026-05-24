@@ -5,6 +5,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 CLUSTER=ms-04-istio
+ISTIO_TAG="${ISTIO_TAG:-1.30.0}"
 
 say() { printf '\n\033[1;36m==> %s\033[0m\n' "$*"; }
 ok()  { printf '  \033[32mPASS\033[0m %s\n' "$*"; }
@@ -18,9 +19,9 @@ else
 fi
 kubectl config use-context "kind-$CLUSTER" >/dev/null
 
-say "2/7 Istio install (default profile, minimal)"
+say "2/7 Istio install (minimal profile, tag $ISTIO_TAG)"
 if ! kubectl get ns istio-system >/dev/null 2>&1; then
-  istioctl install --set profile=minimal -y
+  istioctl install --set profile=minimal --set tag="$ISTIO_TAG" -y
 fi
 kubectl -n istio-system rollout status deployment/istiod --timeout=300s
 
