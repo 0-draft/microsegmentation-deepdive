@@ -67,7 +67,8 @@ jobs:
                 echo "skip CRD-bound: $f"; continue;;
             esac
             echo "::group::kubectl dry-run $f"
-            if ! kubectl apply --dry-run=client -f "$f"; then fail=1; fi
+            # --validate=false: there's no cluster, so skip OpenAPI download
+            if ! kubectl apply --dry-run=client --validate=false -f "$f"; then fail=1; fi
             echo "::endgroup::"
           done < <(find . -type f -path '*/manifests/*.yaml')
           exit "$fail"
