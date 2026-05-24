@@ -50,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Install kubectl
-        uses: azure/setup-kubectl@v4
+        uses: azure/setup-kubectl@v5
       - name: kubectl --dry-run=client on every manifest
         run: |
           set -e
