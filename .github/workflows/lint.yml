@@ -45,30 +45,20 @@ jobs:
             **/*.md
           config: .markdownlint.jsonc
 
-  kubectl-dry-run:
+  kubeconform:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v4
-      - name: kubectl --dry-run=client on every manifest
+      - name: Install kubeconform
         run: |
-          set -e
-          fail=0
-          # Skip CRDs that the client doesn't know about (Calico/Cilium/Istio/SPIRE/Gatekeeper).
-          # We validate plain k8s manifests only.
-          while IFS= read -r f; do
-            case "$f" in
-              */policy-db-l4.yaml|*/policy-cart-l7.yaml|*/policy-deny-staging-to-prod.yaml|\
-              */policy-allow-audit-exception.yaml|*/peer-auth-strict.yaml|\
-              */authz-httpbin-cart-only.yaml|*/template-required-labels.yaml|\
-              */constraint-required-labels.yaml|*/template-no-pod-without-netpol.yaml|\
-              */constraint-no-pod-without-netpol.yaml|*/sync-config.yaml)
-                echo "skip CRD-bound: $f"; continue;;
-            esac
-            echo "::group::kubectl dry-run $f"
-            # --validate=false: there's no cluster, so skip OpenAPI download
-            if ! kubectl apply --dry-run=client --validate=false -f "$f"; then fail=1; fi
-            echo "::endgroup::"
-          done < <(find . -type f -path '*/manifests/*.yaml')
-          exit "$fail"
+          curl -fsSL -o /tmp/kc.tgz \
+            https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz
+          tar -xzf /tmp/kc.tgz -C /tmp
+          sudo install /tmp/kubeconform /usr/local/bin/
+      - name: Validate manifests against bundled k8s schemas
+        run: |
+          # -strict catches unknown fields. -summary prints a final count.
+          # -ignore-missing-schemas lets CRDs (Calico/Cilium/Istio/SPIRE/Gatekeeper)
+          # pass without failing the build; we still validate core k8s objects.
+          find . -type f -path '*/manifests/*.yaml' -print0 \
+            | xargs -0 kubeconform -strict -summary -ignore-missing-schemas
