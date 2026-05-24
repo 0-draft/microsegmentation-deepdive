@@ -4,8 +4,6 @@
 
 Microsegmentation talked about everywhere, almost never shown end-to-end. This repo runs eight different implementations on a laptop, so you can see what each pattern actually does to packets.
 
-Sibling to the dev.to article [microsegmentation-deep-dive](https://github.com/0-draft/dev.to/blob/main/articles/microsegmentation-deep-dive.md).
-
 ## What's in here
 
 | # | Pattern | Tool | What you actually run |

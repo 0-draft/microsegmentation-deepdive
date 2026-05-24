@@ -4,8 +4,6 @@
 
 マイクロセグメンテーションは語られまくっているが、end-to-end で動かす場が少ない。このリポは 8 種類の実装をラップトップ 1 台で実際に走らせて、パケットに何が起きるかを目で見て確認するためのもの。
 
-dev.to 記事 [microsegmentation-deep-dive](https://github.com/0-draft/dev.to/blob/main/articles/microsegmentation-deep-dive.md) の姉妹リポジトリ。
-
 ## 中身
 
 | # | 方式 | ツール | 実際に動かすこと |
