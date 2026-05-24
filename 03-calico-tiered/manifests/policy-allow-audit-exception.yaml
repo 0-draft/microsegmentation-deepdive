@@ -1,0 +1,13 @@
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: allow-audit-to-prod
+spec:
+  # lower order evaluated first; this exception wins over the deny above
+  order: 100
+  selector: env == "prod"
+  types: [Ingress]
+  ingress:
+    - action: Allow
+      source:
+        selector: audit == "true"

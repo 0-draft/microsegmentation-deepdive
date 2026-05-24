@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shop
+  labels:
+    env: prod
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db
+  namespace: shop
+  labels:
+    app: db
+    tier: data
+spec:
+  containers:
+    - name: db
+      image: postgres:16-alpine
+      env:
+        - name: POSTGRES_HOST_AUTH_METHOD
+          value: trust
+        - name: POSTGRES_PASSWORD
+          value: postgres
+      ports:
+        - containerPort: 5432
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cart
+  namespace: shop
+  labels:
+    app: cart
+    tier: app
+spec:
+  containers:
+    - name: client
+      image: nicolaka/netshoot
+      command: ["sleep", "infinity"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web
+  namespace: shop
+  labels:
+    app: web
+    tier: front
+spec:
+  containers:
+    - name: client
+      image: nicolaka/netshoot
+      command: ["sleep", "infinity"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: attacker
+  namespace: shop
+  labels:
+    app: attacker
+spec:
+  containers:
+    - name: client
+      image: nicolaka/netshoot
+      command: ["sleep", "infinity"]

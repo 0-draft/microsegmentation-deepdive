@@ -1,0 +1,70 @@
+
+[1;36m==> 1/7 kind cluster (ms-02-cilium)[0m
+  reusing existing cluster
+
+[1;36m==> 2/7 Cilium 1.19.4[0m
+[33m    /¯¯\
+[36m /¯¯[33m\__/[32m¯¯\[0m    Cilium:             [32mOK[0m
+[36m \__[31m/¯¯\[32m__/[0m    Operator:           [32mOK[0m
+[32m /¯¯[31m\__/[35m¯¯\[0m    Envoy DaemonSet:    [32mOK[0m
+[32m \__[34m/¯¯\[35m__/[0m    Hubble Relay:       [32mOK[0m
+[34m[34m[34m    \__/[0m       ClusterMesh:        [36mdisabled[0m
+
+DaemonSet              cilium                   Desired: 1, Ready: [32m1/1[0m, Available: [32m1/1[0m
+DaemonSet              cilium-envoy             Desired: 1, Ready: [32m1/1[0m, Available: [32m1/1[0m
+Deployment             cilium-operator          Desired: 1, Ready: [32m1/1[0m, Available: [32m1/1[0m
+Deployment             hubble-relay             Desired: 1, Ready: [32m1/1[0m, Available: [32m1/1[0m
+Deployment             hubble-ui                Desired: 1, Ready: [32m1/1[0m, Available: [32m1/1[0m
+Containers:            cilium                   Running: [32m1[0m
+                       cilium-envoy             Running: [32m1[0m
+                       cilium-operator          Running: [32m1[0m
+                       clustermesh-apiserver    
+                       hubble-relay             Running: [32m1[0m
+                       hubble-ui                Running: [32m1[0m
+Cluster Pods:          9/9 managed by Cilium
+Helm chart version:    1.19.4
+Image versions         cilium             quay.io/cilium/cilium:v1.19.4@sha256:2eb67991eaa9368ba199c2fac2c573cb0ffdeb79184533344f42fc9a7ff6af3c: 1
+                       cilium-envoy       quay.io/cilium/cilium-envoy:v1.36.6-1778235340-b87d1e32f522b33bd51701c6476d199326f01496@sha256:71d4fa0ec45e8d546dbd5604e169dc77fe92be63b799313bff031d00d89762e3: 1
+                       cilium-operator    quay.io/cilium/operator-generic:v1.19.4@sha256:1aa2b62735e7d8ab49ee840ae59c346932024c88901579121395c1271b435f71: 1
+                       hubble-relay       quay.io/cilium/hubble-relay:v1.19.4@sha256:59af8c0d561e560c2a042e7600a3496bc0367df8fbf868aa68d5834c8ec1a431: 1
+                       hubble-ui          quay.io/cilium/hubble-ui-backend:v0.13.5@sha256:fac0c300ae119274edca11fd89b1ad23c788792d8bc4ea2ba631c709e8d3c688: 1
+                       hubble-ui          quay.io/cilium/hubble-ui:v0.13.5@sha256:f7d514fc54d784ed6df9d58cf0e97648b143f92b766dd1780ed3fc845bd4c516: 1
+
+[1;36m==> 3/7 Workloads[0m
+namespace/shop unchanged
+pod/db unchanged
+pod/cart unchanged
+pod/web unchanged
+pod/attacker unchanged
+pod/attacker condition met
+pod/cart condition met
+pod/db condition met
+pod/web condition met
+  db=10.244.0.59  cart=10.244.0.75
+
+[1;36m==> 4/7 L4 policy: db only reachable from cart[0m
+ciliumnetworkpolicy.cilium.io/db-allow-from-cart unchanged
+  [32mPASS[0m attacker -> db:5432  blocked
+  [32mPASS[0m cart    -> db:5432  reachable
+
+[1;36m==> 5/7 L7 policy: web->cart GET/POST only[0m
+ciliumnetworkpolicy.cilium.io/cart-l7 unchanged
+  [32mPASS[0m web   GET    /  -> 200
+  [32mPASS[0m web   DELETE /  -> 403  (Envoy-level reject)
+  [32mPASS[0m atk   GET    /  -> 000  (L4 drop, no HTTP at all)
+
+[1;36m==> 6/7 Hubble flows for the last 30s[0m
+May 24 14:02:45.187: shop/attacker:46224 (ID:6789) <> shop/db:5432 (ID:57630) policy-verdict:none TRAFFIC_DIRECTION_UNKNOWN DENIED (TCP Flags: SYN)
+May 24 14:02:46.227: shop/attacker:46224 (ID:6789) <> shop/db:5432 (ID:57630) policy-verdict:none TRAFFIC_DIRECTION_UNKNOWN DENIED (TCP Flags: SYN)
+May 24 14:02:47.302: shop/cart:42695 (ID:55370) -> shop/db:5432 (ID:57630) policy-verdict:none TRAFFIC_DIRECTION_UNKNOWN ALLOWED (TCP Flags: SYN)
+May 24 14:02:52.635: shop/web:42510 (ID:12357) -> shop/cart:80 (ID:55370) policy-verdict:none TRAFFIC_DIRECTION_UNKNOWN ALLOWED (TCP Flags: SYN)
+May 24 14:02:52.763: shop/web:42512 (ID:12357) -> shop/cart:80 (ID:55370) policy-verdict:none TRAFFIC_DIRECTION_UNKNOWN ALLOWED (TCP Flags: SYN)
+May 24 14:02:52.916: shop/attacker:53066 (ID:6789) <> shop/cart:80 (ID:55370) policy-verdict:none TRAFFIC_DIRECTION_UNKNOWN DENIED (TCP Flags: SYN)
+May 24 14:02:53.977: shop/attacker:53066 (ID:6789) <> shop/cart:80 (ID:55370) policy-verdict:none TRAFFIC_DIRECTION_UNKNOWN DENIED (TCP Flags: SYN)
+May 24 14:02:55.017: shop/attacker:53066 (ID:6789) <> shop/cart:80 (ID:55370) policy-verdict:none TRAFFIC_DIRECTION_UNKNOWN DENIED (TCP Flags: SYN)
+May 24 14:02:56.067: shop/attacker:53066 (ID:6789) <> shop/cart:80 (ID:55370) policy-verdict:none TRAFFIC_DIRECTION_UNKNOWN DENIED (TCP Flags: SYN)
+May 24 14:02:57.107: shop/attacker:53066 (ID:6789) <> shop/cart:80 (ID:55370) policy-verdict:none TRAFFIC_DIRECTION_UNKNOWN DENIED (TCP Flags: SYN)
+
+[1;36m==> 7/7 Done[0m
+  Hubble UI:    cilium hubble ui   (http://localhost:12000)
+  Tear down:    ./cleanup.sh

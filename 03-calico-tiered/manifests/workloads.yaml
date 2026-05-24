@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod
+  labels:
+    env: prod
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: staging
+  labels:
+    env: staging
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api
+  namespace: prod
+  labels: { app: api, env: prod }
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.27-alpine
+      ports: [{ containerPort: 80 }]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api
+  namespace: staging
+  labels: { app: api, env: staging }
+spec:
+  containers:
+    - name: client
+      image: nicolaka/netshoot
+      command: ["sleep", "infinity"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api-auditor
+  namespace: staging
+  labels: { app: api, env: staging, audit: "true" }
+spec:
+  containers:
+    - name: client
+      image: nicolaka/netshoot
+      command: ["sleep", "infinity"]

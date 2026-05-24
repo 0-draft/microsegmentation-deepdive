@@ -1,0 +1,78 @@
+
+[1;36m==> 1/6 kind cluster[0m
+No kind clusters found.
+Creating cluster "ms-05-spire" ...
+ • Ensuring node image (kindest/node:v1.35.0) 🖼  ...
+ ✓ Ensuring node image (kindest/node:v1.35.0) 🖼
+ • Preparing nodes 📦   ...
+ ✓ Preparing nodes 📦 
+ • Writing configuration 📜  ...
+ ✓ Writing configuration 📜
+ • Starting control-plane 🕹️  ...
+ ✓ Starting control-plane 🕹️
+ • Installing CNI 🔌  ...
+ ✓ Installing CNI 🔌
+ • Installing StorageClass 💾  ...
+ ✓ Installing StorageClass 💾
+Set kubectl context to "kind-ms-05-spire"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-ms-05-spire
+
+Have a question, bug, or feature request? Let us know! https://kind.sigs.k8s.io/#community 🙂
+
+[1;36m==> 2/6 SPIRE via Helm[0m
+"spiffe" already exists with the same configuration, skipping
+NAME: spire-crds
+LAST DEPLOYED: Sun May 24 23:28:28 2026
+NAMESPACE: spire-mgmt
+STATUS: deployed
+REVISION: 1
+DESCRIPTION: Install complete
+TEST SUITE: None
+NAME: spire
+LAST DEPLOYED: Sun May 24 23:28:29 2026
+NAMESPACE: spire-mgmt
+STATUS: deployed
+REVISION: 1
+DESCRIPTION: Install complete
+NOTES:
+Installed spire…
+
+Spire CR's will be handled only if className is set to "spire-mgmt-spire"
+daemon set "spire-agent" successfully rolled out
+partitioned roll out complete: 1 new pods have been updated...
+clusterspiffeid.spire.spiffe.io "spire-mgmt-spire-default" deleted
+
+[1;36m==> 3/6 Workloads + ClusterSPIFFEID registrations[0m
+namespace/shop created
+serviceaccount/cart-sa created
+serviceaccount/payments-sa created
+serviceaccount/unknown-sa created
+pod/cart created
+pod/payments created
+pod/unknown created
+clusterspiffeid.spire.spiffe.io/cart created
+clusterspiffeid.spire.spiffe.io/payments created
+  waiting for pods (cart/payments must reach Running; unknown will Restart loop without SVID)...
+pod/cart condition met
+pod/payments condition met
+
+[1;36m==> 4/6 cart pod SVID[0m
+SPIFFE ID:		spiffe://example.org/ns/shop/sa/cart-sa
+  [32mPASS[0m cart      SVID = spiffe://example.org/ns/shop/sa/cart-sa
+
+[1;36m==> 5/6 payments pod SVID (must differ)[0m
+SPIFFE ID:		spiffe://example.org/ns/shop/sa/payments-sa
+  [32mPASS[0m payments  SVID = spiffe://example.org/ns/shop/sa/payments-sa
+
+[1;36m==> 6/6 unknown pod (no matching ClusterSPIFFEID -> no SVID)[0m
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+  [32mPASS[0m unknown got no SVID (PermissionDenied / no identity issued)
+
+[1;32mDone.[0m  Tear down with: ./cleanup.sh

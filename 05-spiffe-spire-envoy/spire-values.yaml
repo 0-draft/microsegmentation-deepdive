@@ -1,0 +1,7 @@
+global:
+  spire:
+    trustDomain: example.org
+    clusterName: ms-05-spire
+spire-server:
+  controllerManager:
+    enabled: true

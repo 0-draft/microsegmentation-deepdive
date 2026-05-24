@@ -1,0 +1,12 @@
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: deny-staging-to-prod
+spec:
+  order: 1000
+  selector: env == "prod"
+  types: [Ingress]
+  ingress:
+    - action: Deny
+      source:
+        selector: env == "staging"

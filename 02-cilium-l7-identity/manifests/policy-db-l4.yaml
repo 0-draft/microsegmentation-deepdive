@@ -1,0 +1,17 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: db-allow-from-cart
+  namespace: shop
+spec:
+  endpointSelector:
+    matchLabels:
+      app: db
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: cart
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP

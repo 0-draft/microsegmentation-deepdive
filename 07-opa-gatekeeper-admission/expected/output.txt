@@ -1,0 +1,58 @@
+
+[1;36m==> 1/6 kind cluster[0m
+No kind clusters found.
+Creating cluster "ms-07-gatekeeper" ...
+ • Ensuring node image (kindest/node:v1.35.0) 🖼  ...
+ ✓ Ensuring node image (kindest/node:v1.35.0) 🖼
+ • Preparing nodes 📦   ...
+ ✓ Preparing nodes 📦 
+ • Writing configuration 📜  ...
+ ✓ Writing configuration 📜
+ • Starting control-plane 🕹️  ...
+ ✓ Starting control-plane 🕹️
+ • Installing CNI 🔌  ...
+ ✓ Installing CNI 🔌
+ • Installing StorageClass 💾  ...
+ ✓ Installing StorageClass 💾
+Set kubectl context to "kind-ms-07-gatekeeper"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-ms-07-gatekeeper
+
+Not sure what to do next? 😅  Check out https://kind.sigs.k8s.io/docs/user/quick-start/
+
+[1;36m==> 2/6 Gatekeeper install (3.18.2)[0m
+"gatekeeper" has been added to your repositories
+NAME: gatekeeper
+LAST DEPLOYED: Sun May 24 23:37:10 2026
+NAMESPACE: gatekeeper-system
+STATUS: deployed
+REVISION: 1
+DESCRIPTION: Install complete
+TEST SUITE: None
+deployment "gatekeeper-controller-manager" successfully rolled out
+
+[1;36m==> 3/6 ConstraintTemplates + sync[0m
+constrainttemplate.templates.gatekeeper.sh/k8srequiredlabels created
+constrainttemplate.templates.gatekeeper.sh/k8snopodwithoutnetpol created
+config.config.gatekeeper.sh/config created
+
+[1;36m==> 4/6 Constraints + target namespace[0m
+namespace/prod created
+k8srequiredlabels.constraints.gatekeeper.sh/pods-must-have-app-env created
+k8snopodwithoutnetpol.constraints.gatekeeper.sh/every-pod-namespace-needs-netpol created
+
+[1;36m==> 5/6 Try to create a Pod without labels (should be denied)[0m
+Error from server (Forbidden): error when creating "STDIN": admission webhook "validation.gatekeeper.sh" denied the request: [pods-must-have-app-env] missing required labels: {"app", "env"}
+[every-pod-namespace-needs-netpol] namespace "prod" has no NetworkPolicy (none synced); refusing to admit pod "nolabel"
+  [32mPASS[0m Pod without labels rejected (K8sRequiredLabels)
+
+[1;36m==> 6/6 Try to create a labelled Pod in a netpol-less namespace, then with a netpol[0m
+Error from server (Forbidden): error when creating "STDIN": admission webhook "validation.gatekeeper.sh" denied the request: [every-pod-namespace-needs-netpol] namespace "prod" has no NetworkPolicy (none synced); refusing to admit pod "cart"
+  [32mPASS[0m Pod rejected (namespace has no NetworkPolicy)
+networkpolicy.networking.k8s.io/default-deny created
+pod/cart created
+pod/cart condition met
+  [32mPASS[0m Pod admitted after NetworkPolicy added
+
+[1;32mDone.[0m  Tear down with: ./cleanup.sh

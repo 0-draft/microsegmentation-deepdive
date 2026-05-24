@@ -1,0 +1,29 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8snopodwithoutnetpol
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sNoPodWithoutNetpol
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8snopodwithoutnetpol
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Pod"
+          ns := input.review.object.metadata.namespace
+          # data.inventory contains all synced cluster objects, by group/version/kind/ns
+          netpols := data.inventory.namespace[ns]["networking.k8s.io/v1"]["NetworkPolicy"]
+          count(netpols) == 0
+          msg := sprintf("namespace %q has no NetworkPolicy; refusing to admit pod %q", [ns, input.review.object.metadata.name])
+        }
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Pod"
+          ns := input.review.object.metadata.namespace
+          not data.inventory.namespace[ns]["networking.k8s.io/v1"]["NetworkPolicy"]
+          msg := sprintf("namespace %q has no NetworkPolicy (none synced); refusing to admit pod %q", [ns, input.review.object.metadata.name])
+        }

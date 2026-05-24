@@ -1,0 +1,113 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shop
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cart-sa
+  namespace: shop
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: payments-sa
+  namespace: shop
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: unknown-sa
+  namespace: shop
+---
+# Use `spire-agent api watch` as a long-running entrypoint.
+# It prints SVID details to stdout and rotates as they renew.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cart
+  namespace: shop
+  labels: { app: cart }
+spec:
+  serviceAccountName: cart-sa
+  containers:
+    - name: cli
+      image: ghcr.io/spiffe/spire-agent:1.14.5
+      command: ["/opt/spire/bin/spire-agent"]
+      args: ["api", "watch", "-socketPath", "/spiffe-workload-api/spire-agent.sock"]
+      volumeMounts:
+        - name: spire-agent-socket
+          mountPath: /spiffe-workload-api
+          readOnly: true
+  volumes:
+    - name: spire-agent-socket
+      csi:
+        driver: csi.spiffe.io
+        readOnly: true
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: payments
+  namespace: shop
+  labels: { app: payments }
+spec:
+  serviceAccountName: payments-sa
+  containers:
+    - name: cli
+      image: ghcr.io/spiffe/spire-agent:1.14.5
+      command: ["/opt/spire/bin/spire-agent"]
+      args: ["api", "watch", "-socketPath", "/spiffe-workload-api/spire-agent.sock"]
+      volumeMounts:
+        - name: spire-agent-socket
+          mountPath: /spiffe-workload-api
+          readOnly: true
+  volumes:
+    - name: spire-agent-socket
+      csi:
+        driver: csi.spiffe.io
+        readOnly: true
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: unknown
+  namespace: shop
+  labels: { app: unknown }
+spec:
+  serviceAccountName: unknown-sa
+  containers:
+    - name: cli
+      image: ghcr.io/spiffe/spire-agent:1.14.5
+      command: ["/opt/spire/bin/spire-agent"]
+      args: ["api", "watch", "-socketPath", "/spiffe-workload-api/spire-agent.sock"]
+      volumeMounts:
+        - name: spire-agent-socket
+          mountPath: /spiffe-workload-api
+          readOnly: true
+  volumes:
+    - name: spire-agent-socket
+      csi:
+        driver: csi.spiffe.io
+        readOnly: true
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: cart
+spec:
+  className: spire-mgmt-spire
+  spiffeIDTemplate: 'spiffe://{{ .TrustDomain }}/ns/{{ .PodMeta.Namespace }}/sa/{{ .PodSpec.ServiceAccountName }}'
+  podSelector:
+    matchLabels: { app: cart }
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: payments
+spec:
+  className: spire-mgmt-spire
+  spiffeIDTemplate: 'spiffe://{{ .TrustDomain }}/ns/{{ .PodMeta.Namespace }}/sa/{{ .PodSpec.ServiceAccountName }}'
+  podSelector:
+    matchLabels: { app: payments }

@@ -1,0 +1,25 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Local generated
+**/tmp/
+**/.tmp/
+**/*.log
+**/kubeconfig
+**/.terraform/
+**/terraform.tfstate*
+**/*.tfvars
+!**/terraform.tfvars.example
+
+# Volumes
+volume/
+
+# Helm
+**/charts/
+**/Chart.lock

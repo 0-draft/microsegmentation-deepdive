@@ -1,0 +1,58 @@
+
+[1;36m==> 1/5 Docker network and containers[0m
+Unable to find image 'alpine:3.20' locally
+3.20: Pulling from library/alpine
+3f26bc2dec0b: Pulling fs layer
+3f26bc2dec0b: Download complete
+3f26bc2dec0b: Pull complete
+cee42a41056b: Download complete
+8b093306b817: Download complete
+Digest: sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
+Status: Downloaded newer image for alpine:3.20
+  waiting for postgres to accept connections...
+
+[1;36m==> 2/5 Baseline: both web and attacker reach db:5432[0m
+  [32mPASS[0m web      -> db:5432  reachable
+  [32mPASS[0m attacker -> db:5432  reachable (flat)
+
+[1;36m==> 3/5 Install nftables into db container[0m
+
+[1;36m==> 4/5 Push policy: docker exec db nft -f /etc/policy.nft[0m
+  current ruleset:
+# Warning: table ip nat is managed by iptables-nft, do not touch!
+    table ip nat {
+    	chain DOCKER_OUTPUT {
+    		ip daddr 127.0.0.11 tcp dport 53 counter packets 0 bytes 0 xt target "DNAT"
+    		ip daddr 127.0.0.11 udp dport 53 counter packets 1 bytes 68 xt target "DNAT"
+    	}
+    
+    	chain OUTPUT {
+    		type nat hook output priority dstnat; policy accept;
+    		ip daddr 127.0.0.11 counter packets 1 bytes 68 jump DOCKER_OUTPUT
+    	}
+    
+    	chain DOCKER_POSTROUTING {
+    		ip saddr 127.0.0.11 tcp sport 35213 counter packets 0 bytes 0 xt target "SNAT"
+    		ip saddr 127.0.0.11 udp sport 42820 counter packets 0 bytes 0 xt target "SNAT"
+    	}
+    
+    	chain POSTROUTING {
+    		type nat hook postrouting priority srcnat; policy accept;
+    		ip daddr 127.0.0.11 counter packets 1 bytes 68 jump DOCKER_POSTROUTING
+    	}
+    }
+    table inet filter {
+    	chain input {
+    		type filter hook input priority filter; policy drop;
+    		iif "lo" accept
+    		ct state established,related accept
+    		ip protocol icmp accept
+    		ip saddr 10.99.0.20 tcp dport 5432 ct state new accept
+    	}
+    }
+
+[1;36m==> 5/5 Enforcement check[0m
+  [32mPASS[0m web      -> db:5432  still reachable
+  [32mPASS[0m attacker -> db:5432  blocked (host nftables)
+
+[1;32mDone.[0m  Tear down with: ./cleanup.sh

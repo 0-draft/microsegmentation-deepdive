@@ -1,0 +1,42 @@
+
+[1;36m==> 1/7 kind cluster[0m
+  reusing existing cluster
+
+[1;36m==> 2/7 Istio install (default profile, minimal)[0m
+deployment "istiod" successfully rolled out
+
+[1;36m==> 3/7 Workloads + sidecar injection[0m
+  waiting for istiod webhook endpoints...
+namespace/shop unchanged
+serviceaccount/httpbin-sa unchanged
+service/httpbin unchanged
+deployment.apps/httpbin unchanged
+serviceaccount/cart-sa unchanged
+pod/cart created
+serviceaccount/attacker-sa unchanged
+pod/attacker created
+namespace/outside unchanged
+pod/outsider unchanged
+pod/httpbin-b885d6464-zhhn5 condition met
+pod/cart condition met
+pod/attacker condition met
+pod/outsider condition met
+
+[1;36m==> 4/7 Baseline: everyone can reach httpbin (no policy yet)[0m
+  shop/cart -> httpbin = 503
+  shop/attacker -> httpbin = 200
+  outside/outsider -> httpbin = 200
+
+[1;36m==> 5/7 STRICT mTLS[0m
+peerauthentication.security.istio.io/default-strict created
+  [32mPASS[0m outsider (no sidecar) -> httpbin  blocked at TLS (000)
+  [32mPASS[0m cart (sidecar)        -> httpbin  200
+
+[1;36m==> 6/7 Principal-based AuthorizationPolicy: only cart SA[0m
+authorizationpolicy.security.istio.io/httpbin-cart-only created
+  [32mPASS[0m cart-sa     -> httpbin  200  (principal allowed)
+  [32mPASS[0m attacker-sa -> httpbin  403  (RBAC: access denied)
+
+[1;36m==> 7/7 Done[0m
+  Inspect mTLS:   istioctl proxy-config secret -n shop cart
+  Tear down:      ./cleanup.sh
